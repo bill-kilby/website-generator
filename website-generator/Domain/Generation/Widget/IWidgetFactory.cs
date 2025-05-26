@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace website_generator.Domain.Generation
+namespace website_generator.Domain.Generation.Widget
 {
-    internal interface IPageGenerator
+    internal interface IWidgetFactory
     {
-        public void Generate();
     }
 }

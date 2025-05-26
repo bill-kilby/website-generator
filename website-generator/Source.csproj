@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Engine\Generation\Widget\" />
-    <Folder Include="Engine\Generation\Section\" />
+    <Folder Include="Domain\Generation\Section\" />
+    <Folder Include="Engine\Generation\Sections\" />
   </ItemGroup>
 
 </Project>
