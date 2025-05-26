@@ -5,7 +5,8 @@ namespace Test.Engine.Generation.Widgets.Mocks
 {
     internal class WidgetFactoryMock : WidgetFactoryBase<SinglePropertyWidgetMetadataMock>
     {
-        public WidgetFactoryMock(IWidgetLoader widgetLoader, IWidgetVerifier widgetVerifier) : base(widgetLoader, widgetVerifier)
+        public WidgetFactoryMock(IWidgetLoader widgetLoader, IWidgetVerifier widgetVerifier, string name = "WidgetFactoryMock")
+            : base(name, widgetLoader, widgetVerifier)
         {
         }
     }
