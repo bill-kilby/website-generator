@@ -3,7 +3,7 @@ using NSubstitute.ExceptionExtensions;
 using Test.Engine.Generation.Widgets.Mocks;
 using website_generator.Domain.Generation.Common;
 using website_generator.Domain.Generation.Exceptions;
-using website_generator.Domain.Generation.Widget;
+using website_generator.Domain.Generation.Widgets;
 using website_generator.Engine.Generation.Widgets.Common;
 
 namespace Test.Engine.Generation.Widgets.Common
@@ -25,7 +25,7 @@ namespace Test.Engine.Generation.Widgets.Common
             var widgetLoader = Substitute.For<IWidgetLoader>();
             widgetLoader.LoadTemplateFromDisk("Test-Widget").Returns(expected);
 
-            var verifier = new website_generator.Engine.Generation.Widgets.Common.WidgetVerifier(widgetLoader, _htmlVerifier);
+            var verifier = new WidgetVerifier(widgetLoader, _htmlVerifier);
 
             // Act
             var exception = Record.Exception(
@@ -48,7 +48,7 @@ namespace Test.Engine.Generation.Widgets.Common
                 .When(x => x.Verify(expected))
                 .Do(x => throw new InvalidHTMLException(""));
 
-            var verifier = new website_generator.Engine.Generation.Widgets.Common.WidgetVerifier(widgetLoader, _htmlVerifier);
+            var verifier = new WidgetVerifier(widgetLoader, _htmlVerifier);
 
             // Act
             var exception = Record.Exception(
@@ -66,7 +66,7 @@ namespace Test.Engine.Generation.Widgets.Common
             var widgetLoader = Substitute.For<IWidgetLoader>();
             widgetLoader.LoadTemplateFromDisk("Test-Widget").Throws(new FileNotFoundException());
 
-            var verifier = new website_generator.Engine.Generation.Widgets.Common.WidgetVerifier(widgetLoader, _htmlVerifier);
+            var verifier = new WidgetVerifier(widgetLoader, _htmlVerifier);
 
             // Act
             var exception = Record.Exception(

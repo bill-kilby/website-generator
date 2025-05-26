@@ -1,6 +1,6 @@
 ﻿using website_generator.Engine.Generation.Widgets.Common;
 
-namespace website_generator.Domain.Generation.Widget
+namespace website_generator.Domain.Generation.Widgets
 {
     internal interface IWidgetFactory
     {

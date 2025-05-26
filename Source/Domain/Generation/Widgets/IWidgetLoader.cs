@@ -1,4 +1,4 @@
-﻿namespace website_generator.Domain.Generation.Widget
+﻿namespace website_generator.Domain.Generation.Widgets
 {
     internal interface IWidgetLoader
     {
