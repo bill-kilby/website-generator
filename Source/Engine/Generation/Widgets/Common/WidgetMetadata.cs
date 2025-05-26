@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace website_generator.Engine.Generation.Widgets.Common
+﻿namespace website_generator.Engine.Generation.Widgets.Common
 {
     internal abstract class WidgetMetadata
     {

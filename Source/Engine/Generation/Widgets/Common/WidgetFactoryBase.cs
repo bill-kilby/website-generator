@@ -4,22 +4,32 @@ using website_generator.Domain.Generation.Widget;
 
 namespace website_generator.Engine.Generation.Widgets.Common
 {
-    internal abstract class WidgetFactoryBase<TMetadata> where TMetadata : WidgetMetadata
+    internal abstract class WidgetFactoryBase<TMetadata> : IWidgetFactory
+        where TMetadata : WidgetMetadata
     {
+        public string Name { get; }
+
         protected readonly IWidgetLoader _widgetLoader;
         protected readonly IWidgetVerifier _widgetVerifier;
-        private readonly Regex _fieldRegex = new(@"\{([A-Za-z]+)\}", RegexOptions.Compiled);
+        protected readonly Regex _fieldRegex = new(@"\{([A-Za-z]+)\}", RegexOptions.Compiled);
 
         public WidgetFactoryBase(
+            string name,
             IWidgetLoader widgetLoader,
             IWidgetVerifier widgetVerifier
             )
         {
+            Name = name;
             _widgetLoader = widgetLoader;
             _widgetVerifier = widgetVerifier;
         }
 
-        public virtual Widget CreateWidget(TMetadata metadata)
+        public Widget CreateWidget(WidgetMetadata metadata)
+        {
+            return GenerateTypedWidget((TMetadata)metadata);
+        }
+
+        private Widget GenerateTypedWidget(TMetadata metadata)
         {
             _widgetVerifier.Verify(metadata);
 
