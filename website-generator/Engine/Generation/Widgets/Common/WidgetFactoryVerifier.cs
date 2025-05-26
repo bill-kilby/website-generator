@@ -14,8 +14,10 @@ namespace website_generator.Engine.Generation.Widgets.Common
 {
     internal class WidgetFactoryVerifier : IWidgetFactoryVerifier
     {
-        private IWidgetLoader _widgetLoader;
-        private IHtmlVerifier _htmlVerifier;
+        private readonly IWidgetLoader _widgetLoader;
+        private readonly IHtmlVerifier _htmlVerifier;
+        private readonly Regex _fieldRegex = new(@"\{([A-Za-z]+)\}", RegexOptions.Compiled);
+
 
         private IWidgetFactory _widgetFactory;
         private WidgetMetadata _widgetMetadata;
@@ -50,54 +52,58 @@ namespace website_generator.Engine.Generation.Widgets.Common
         private void VerifyMetadata()
         {
             var html = _widgetLoader.LoadTemplateFromDisk(_widgetMetadata.Name);
-            
-            var captures = Regex.Matches(html, @"\{([a-zA-Z]+)\}");
-            var distinctCaptures = captures.Distinct();
 
-            var fields = GetFields();
+            var htmlFields = GetHtmlFields(html);
+            var metadataFields = GetMetadataFields();
 
-            VerifyFields(fields, distinctCaptures);
+            VerifyFields(metadataFields, htmlFields);
         }
 
-        private void VerifyFields(HashSet<string> fields, IEnumerable<Match> captures)
+        private void VerifyFields(HashSet<string> metadataFields, HashSet<Match> htmlFields)
         {
-            VerifyFieldCount(fields, captures);
-
-            VerifyFieldNames(fields, captures);
+            VerifyFieldCount(metadataFields, htmlFields);
+            VerifyFieldNames(metadataFields, htmlFields);
         }
 
-        private void VerifyFieldNames(HashSet<string> fields, IEnumerable<Match> captures)
+        private void VerifyFieldNames(HashSet<string> metadataFields, HashSet<Match> htmlFields)
         {
-            foreach(var capture in captures)
+            foreach(var field in htmlFields)
             {
-                var inner = capture.Groups[1].Value;
+                var inner = field.Groups[1].Value;
 
-                if (!fields.Contains(inner))
+                if (!metadataFields.Contains(inner))
                 {
-                    throw new InvalidMetadataException($"Name does not exist in both metadata and HTML: {capture.Value}.");
+                    throw new InvalidMetadataException($"Name does not exist in both metadata and HTML: {inner}.");
                 }
             }
         }
         
-        private void VerifyFieldCount(HashSet<string> fields, IEnumerable<Match> captures)
+        private void VerifyFieldCount(HashSet<string> metadataFields, HashSet<Match> htmlFields)
         {
-            if (fields.Count() - 1 == captures.Count()) return;
+            if (metadataFields.Count - 1 == htmlFields.Count) return;
 
-            var missing = captures
-                .Where(c => !fields.Contains(c.Value))
+            var missing = htmlFields
+                .Where(c => !metadataFields.Contains(c.Value))
                 .Select(c => c.Value)
                 .ToList();
 
             throw new InvalidMetadataException($"Metadata is missing: {missing}");
         }
 
-        private HashSet<string> GetFields()
+        private HashSet<string> GetMetadataFields()
         {
-            var type = _widgetMetadata.GetType();
+            var fields = _widgetMetadata.GetType()
+                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            return fields.Select(f => f.Name).ToHashSet();
+        }
 
-            return new HashSet<string>(fields.Select(f => f.Name));
+        private HashSet<Match> GetHtmlFields(string html)
+        {
+            return _fieldRegex
+                .Matches(html)
+                .Distinct()
+                .ToHashSet();
         }
     }
 }
