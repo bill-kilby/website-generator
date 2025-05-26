@@ -23,30 +23,26 @@ namespace website_generator.Engine.Generation.Widgets.Common
         {
             _widgetVerifier.Verify(metadata);
 
-            var html = _widgetLoader.LoadTemplateFromDisk(metadata.Name);
-            html = InsertProperties(metadata, html);
+            var html = GenerateWidgetHtml(metadata);
 
-            if (HasRemainingFields(html)) throw new InvalidHTMLException($"Properties remain in: {html}.");
+            if (HasRemainingFields(html))
+                throw new InvalidHTMLException($"Properties remain in: {html}.");
 
-            return new Widget(
-                metadata.Name,
-                html
-                );
+            return new Widget(metadata.Name, html);
         }
 
-        protected string InsertProperties(TMetadata metadata, string html)
+        private string GenerateWidgetHtml(TMetadata metadata)
         {
-            var fields = metadata.GetFields();
+            var template = _widgetLoader.LoadTemplateFromDisk(metadata.Name);
+            return ReplaceTemplateFields(metadata, template);
+        }
 
-            foreach (var field in fields)
+        private string ReplaceTemplateFields(TMetadata metadata, string html)
+        {
+            foreach (var field in metadata.GetFields())
             {
                 var regex = GetTargetRegex(field);
-
-                html = Regex.Replace(
-                    html,
-                    regex,
-                    metadata.GetValue(field)
-                    );
+                html = Regex.Replace(html, regex, metadata.GetValue(field));
             }
 
             return html;
