@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using website_generator.Domain.Generation;
+using website_generator.Domain.Generation.Page;
 using website_generator.Extensions;
 
 namespace website_generator
