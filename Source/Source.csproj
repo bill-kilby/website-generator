@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Engine\Generation\Sections\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Html\HeroWidget.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

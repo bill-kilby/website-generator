@@ -9,9 +9,9 @@ namespace website_generator.Domain.Generation.Section
 {
     internal class Section
     {
-        public List<Widget> Widgets { get; set; }
+        public List<string> Widgets { get; set; }
 
-        public Section(List<Widget> widgets)
+        public Section(List<string> widgets)
         {
             this.Widgets = widgets;
         }
