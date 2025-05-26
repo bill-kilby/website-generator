@@ -1,28 +1,19 @@
-﻿using HtmlAgilityPack;
-using NSubstitute;
+﻿using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Test.Engine.Generation.Widgets.Mocks;
 using website_generator.Domain.Generation.Common;
 using website_generator.Domain.Generation.Exceptions;
 using website_generator.Domain.Generation.Widget;
 using website_generator.Engine.Generation.Widgets.Common;
-using Xunit.Sdk;
 
 namespace Test.Engine.Generation.Widgets.Common
 {
-    public class WidgetFactoryVerifierTests
+    public class WidgetVerifierTests
     {
-        private IWidgetFactory _widgetFactory;
         private IHtmlVerifier _htmlVerifier;
 
-        public WidgetFactoryVerifierTests()
+        public WidgetVerifierTests()
         {
-            _widgetFactory = Substitute.For<IWidgetFactory>();
             _htmlVerifier = Substitute.For<IHtmlVerifier>();
         }
 
@@ -34,11 +25,11 @@ namespace Test.Engine.Generation.Widgets.Common
             var widgetLoader = Substitute.For<IWidgetLoader>();
             widgetLoader.LoadTemplateFromDisk("Test-Widget").Returns(expected);
 
-            var verifier = new WidgetFactoryVerifier(widgetLoader, _htmlVerifier);
+            var verifier = new website_generator.Engine.Generation.Widgets.Common.WidgetVerifier(widgetLoader, _htmlVerifier);
 
             // Act
             var exception = Record.Exception(
-                () => verifier.Verify(_widgetFactory, GetValidMetadata())
+                () => verifier.Verify(GetValidMetadata())
                 );
 
             // Assert
@@ -57,11 +48,11 @@ namespace Test.Engine.Generation.Widgets.Common
                 .When(x => x.Verify(expected))
                 .Do(x => throw new InvalidHTMLException(""));
 
-            var verifier = new WidgetFactoryVerifier(widgetLoader, _htmlVerifier);
+            var verifier = new website_generator.Engine.Generation.Widgets.Common.WidgetVerifier(widgetLoader, _htmlVerifier);
 
             // Act
             var exception = Record.Exception(
-                () => verifier.Verify(_widgetFactory, GetValidMetadata())
+                () => verifier.Verify(GetValidMetadata())
                 );
 
             // Assert
@@ -75,11 +66,11 @@ namespace Test.Engine.Generation.Widgets.Common
             var widgetLoader = Substitute.For<IWidgetLoader>();
             widgetLoader.LoadTemplateFromDisk("Test-Widget").Throws(new FileNotFoundException());
 
-            var verifier = new WidgetFactoryVerifier(widgetLoader, _htmlVerifier);
+            var verifier = new website_generator.Engine.Generation.Widgets.Common.WidgetVerifier(widgetLoader, _htmlVerifier);
 
             // Act
             var exception = Record.Exception(
-                () => verifier.Verify(_widgetFactory, GetValidMetadata())
+                () => verifier.Verify(GetValidMetadata())
                 );
 
             // Assert
@@ -94,13 +85,13 @@ namespace Test.Engine.Generation.Widgets.Common
             var widgetLoader = Substitute.For<IWidgetLoader>();
             widgetLoader.LoadTemplateFromDisk("Test-Widget").Returns(expected);
 
-            var metadata = new SinglePropertyWidgetMetadataMock("Test-Widget", "PropertyValue");
+            var metadata = new SinglePropertyWidgetMetadataMock("Test-Widget");
 
-            var verifier = new WidgetFactoryVerifier(widgetLoader, _htmlVerifier);
+            var verifier = new WidgetVerifier(widgetLoader, _htmlVerifier);
 
             // Act
             var exception = Record.Exception(
-                () => verifier.Verify(_widgetFactory, metadata)
+                () => verifier.Verify(metadata)
                 );
 
             // Assert
@@ -117,11 +108,11 @@ namespace Test.Engine.Generation.Widgets.Common
 
             var metadata = new WidgetMetadataMock("Test-Widget");
 
-            var verifier = new WidgetFactoryVerifier(widgetLoader, _htmlVerifier);
+            var verifier = new WidgetVerifier(widgetLoader, _htmlVerifier);
 
             // Act
             var exception = Record.Exception(
-                () => verifier.Verify(_widgetFactory, metadata)
+                () => verifier.Verify(metadata)
                 );
 
             // Assert
@@ -136,13 +127,13 @@ namespace Test.Engine.Generation.Widgets.Common
             var widgetLoader = Substitute.For<IWidgetLoader>();
             widgetLoader.LoadTemplateFromDisk("Test-Widget").Returns(expected);
 
-            var metadata = new SinglePropertyWidgetMetadataMock("Test-Widget", "PropertyValue");
+            var metadata = new SinglePropertyWidgetMetadataMock("Test-Widget");
 
-            var verifier = new WidgetFactoryVerifier(widgetLoader, _htmlVerifier);
+            var verifier = new WidgetVerifier(widgetLoader, _htmlVerifier);
 
             // Act
             var exception = Record.Exception(
-                () => verifier.Verify(_widgetFactory, metadata)
+                () => verifier.Verify(metadata)
                 );
 
             // Assert
@@ -157,13 +148,13 @@ namespace Test.Engine.Generation.Widgets.Common
             var widgetLoader = Substitute.For<IWidgetLoader>();
             widgetLoader.LoadTemplateFromDisk("Test-Widget").Returns(expected);
 
-            var metadata = new SinglePropertyWidgetMetadataMock("Test-Widget", "PropertyValue");
+            var metadata = new SinglePropertyWidgetMetadataMock("Test-Widget");
 
-            var verifier = new WidgetFactoryVerifier(widgetLoader, _htmlVerifier);
+            var verifier = new WidgetVerifier(widgetLoader, _htmlVerifier);
 
             // Act
             var exception = Record.Exception(
-                () => verifier.Verify(_widgetFactory, metadata)
+                () => verifier.Verify(metadata)
                 );
 
             // Assert
