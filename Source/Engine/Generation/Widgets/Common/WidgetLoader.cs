@@ -1,4 +1,4 @@
-﻿using website_generator.Domain.Generation.Widget;
+﻿using website_generator.Domain.Generation.Widgets;
 
 namespace website_generator.Engine.Generation.Widgets.Common
 {
