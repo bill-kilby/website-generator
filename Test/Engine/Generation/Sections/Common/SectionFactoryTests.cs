@@ -11,7 +11,7 @@ using website_generator.Domain.Generation.Sections;
 using website_generator.Domain.Generation.Widgets;
 using website_generator.Engine.Generation.Sections.Common;
 
-namespace Test.Engine.Generation.Sections
+namespace Test.Engine.Generation.Sections.Common
 {
     public class SectionFactoryTests
     {
@@ -60,7 +60,5 @@ namespace Test.Engine.Generation.Sections
             // Assert
             Assert.NotNull(exception);
         }
-
-        private IWidgetFactory GetWidgetFactory() => Substitute.For<IWidgetFactory>();
     }
 }
