@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using website_generator.Domain.Generation.Widgets;
 
-namespace website_generator.Domain.Generation.Section
+namespace website_generator.Domain.Generation.Sections
 {
     internal class Section
     {

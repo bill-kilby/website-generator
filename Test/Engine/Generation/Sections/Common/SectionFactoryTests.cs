@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Test.Engine.Generation.Sections.Mocks;
 using Test.Engine.Generation.Widgets.Mocks;
-using website_generator.Domain.Generation.Section;
+using website_generator.Domain.Generation.Exceptions;
+using website_generator.Domain.Generation.Sections;
 using website_generator.Domain.Generation.Widgets;
 using website_generator.Engine.Generation.Sections.Common;
 
@@ -15,21 +16,18 @@ namespace Test.Engine.Generation.Sections
     public class SectionFactoryTests
     {
         private SectionFactoryBase _factory;
-        private IWidgetFactoryCache _widgetFactoryCache;
+        private ISectionFactoryVerifier _sectionFactoryVerifier;
 
         public SectionFactoryTests()
         {
-            _widgetFactoryCache = Substitute.For<IWidgetFactoryCache>();
-            _factory = new SectionFactoryMock(_widgetFactoryCache);
+            _sectionFactoryVerifier = Substitute.For<ISectionFactoryVerifier>();
+            _factory = new SectionFactoryMock(_sectionFactoryVerifier);
         }
 
         [Fact]
         public void WhenCreatingSection_GivenValidSectionSetup_ThenSectionCreated()
         {
             // Assemble
-            _widgetFactoryCache.GetFactory("TestWidgetOne").Returns(GetWidgetFactory());
-            _widgetFactoryCache.GetFactory("TestWidgetTwo").Returns(GetWidgetFactory());
-
             var expected = new Section(
                 new()
                 {
@@ -47,11 +45,12 @@ namespace Test.Engine.Generation.Sections
         }
 
         [Fact]
-        public void WhenCreatingSection_GivenUnregisteredWidget_ThenErrorThrown()
+        public void WhenCreatingSection_GivenInvalidSectionSetup_ThenErrorThrown()
         {
             // Assemble
-            _widgetFactoryCache.GetFactory("IncorrectWidgetOne").Returns(GetWidgetFactory());
-            _widgetFactoryCache.GetFactory("IncorrectWidgetTwo").Returns(GetWidgetFactory());
+            _sectionFactoryVerifier
+                .WhenForAnyArgs(x => x.Verify(Arg.Any<Section>()))
+                .Do(_ => throw new Exception());
 
             // Act
             var exception = Record.Exception(

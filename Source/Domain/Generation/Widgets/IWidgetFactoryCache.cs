@@ -3,5 +3,7 @@
     internal interface IWidgetFactoryCache
     {
         public IWidgetFactory GetFactory(string name);
+
+        public bool Contains(string name);
     }
 }

@@ -3,26 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using website_generator.Domain.Generation.Section;
+using website_generator.Domain.Generation.Sections;
 using website_generator.Domain.Generation.Widgets;
 
 namespace website_generator.Engine.Generation.Sections.Common
 {
-    internal abstract class SectionFactoryBase
+    internal abstract class SectionFactoryBase : ISectionFactory
     {
         public string Name { get; }
 
-        private readonly IWidgetFactoryCache _widgetFactoryCache;
+        private readonly ISectionFactoryVerifier _sectionFactoryVerifier;
+
+        protected abstract Section _section { get; }
 
         public SectionFactoryBase(
             string name,
-            IWidgetFactoryCache widgetFactoryCache
+            ISectionFactoryVerifier sectionFactoryVerifier
             )
         {
             Name = name;
-            _widgetFactoryCache = widgetFactoryCache;
+            _sectionFactoryVerifier = sectionFactoryVerifier;
         }
 
-        public abstract Section CreateSection();
+        public Section CreateSection()
+        {
+            _sectionFactoryVerifier.Verify(_section);
+
+            return _section;
+        }
     }
 }

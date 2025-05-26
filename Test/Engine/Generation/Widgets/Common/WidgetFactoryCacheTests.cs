@@ -9,20 +9,23 @@ namespace Test.Engine.Generation.Widgets.Common
         private int _factoryNum = 0;
         private IWidgetFactoryCache _factoryCache;
 
-        [Fact]
-        public void WhenAccessingCache_GivenValidEntry_GetEntry()
+        public WidgetFactoryCacheTests()
         {
-            // Assemble
             var entries = new List<IWidgetFactory>()
             {
                 GenerateFactoryMock(),
                 GenerateFactoryMock()
             };
             _factoryCache = new WidgetFactoryCache(entries);
+        }
 
+        [Fact]
+        public void WhenAccessingCache_GivenValidEntry_GetEntry()
+        {
+            // Assemble
 
             // Act
-            var result = _factoryCache.GetFactory(entries[0].Name);
+            var result = _factoryCache.GetFactory("TestFactory1");
 
             // Assert
             Assert.NotNull(result);
@@ -32,12 +35,6 @@ namespace Test.Engine.Generation.Widgets.Common
         public void WhenAccessingCache_GivenInvalidEntry_ThrowsError()
         {
             // Assemble
-            var entries = new List<IWidgetFactory>()
-            {
-                GenerateFactoryMock(),
-                GenerateFactoryMock()
-            };
-            _factoryCache = new WidgetFactoryCache(entries);
 
             // Act
             var exception = Record.Exception(

@@ -24,5 +24,10 @@ namespace website_generator.Engine.Generation.Widgets.Common
 
             return _factoryCache[name];
         }
+
+        public bool Contains(string name)
+        {
+            return _factoryCache.ContainsKey(name);
+        }
     }
 }
