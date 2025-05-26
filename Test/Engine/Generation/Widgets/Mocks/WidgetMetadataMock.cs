@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using website_generator.Engine.Generation.Widgets.Common;
 
-namespace website_generator.Domain.Generation.Widget
+namespace Test.Engine.Generation.Widgets.Mocks
 {
-    internal interface IWidgetFactory
+    internal class WidgetMetadataMock : WidgetMetadata
     {
-        public IWidget CreateWidget(WidgetMetadata metadata);
+        public WidgetMetadataMock(string name) : base(name)
+        {
+        }
     }
 }

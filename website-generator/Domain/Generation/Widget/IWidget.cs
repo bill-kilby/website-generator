@@ -8,5 +8,7 @@ namespace website_generator.Domain.Generation.Widget
 {
     internal interface IWidget
     {
+        public string Name { get; set; }
+        public string Content { get; set; } 
     }
 }

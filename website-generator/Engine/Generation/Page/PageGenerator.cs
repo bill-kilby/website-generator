@@ -10,7 +10,7 @@ namespace website_generator.Engine.Generation.Page
     internal class PageGenerator : IPageGenerator
     {
         // TODO: Should contain a list of the sections.
-        internal void Generate()
+        public void Generate()
         {
             throw new NotImplementedException();
         }

@@ -8,6 +8,6 @@ namespace website_generator.Domain.Generation.Widget
 {
     internal interface IWidgetLoader
     {
-        internal string LoadTemplateFromDisk(string widgetName);
+        public string LoadTemplateFromDisk(string widgetName);
     }
 }
