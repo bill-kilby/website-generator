@@ -15,8 +15,11 @@ namespace website_generator
 
             var provider = services.BuildServiceProvider();
 
-            provider.GetRequiredService<IPageGenerator>()
+            var innerHtml = provider.GetRequiredService<IPageGenerator>()
                 .Generate();
+
+            provider.GetRequiredService<IPageWriter>()
+                .Write(innerHtml);
         }
     }
 }

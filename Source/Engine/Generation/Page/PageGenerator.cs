@@ -4,15 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using website_generator.Domain.Generation.Page;
+using website_generator.Domain.Generation.Sections;
 
 namespace website_generator.Engine.Generation.Page
 {
     internal class PageGenerator : IPageGenerator
     {
-        // TODO: Should contain a list of the sections.
-        public void Generate()
+        private readonly List<ISectionFactory> _sectionFactories;
+
+        public PageGenerator(
+            List<ISectionFactory> sectionFactories
+            )
         {
-            throw new NotImplementedException();
+            _sectionFactories = sectionFactories;
+        }
+
+        public string Generate()
+        {
+            var sb = new StringBuilder();
+
+            foreach(var factory in _sectionFactories )
+            {
+                var section = factory.CreateSection();
+
+                sb.Append( section );
+            }
+
+            return sb.ToString();
         }
     }
 }
