@@ -8,30 +8,18 @@ using website_generator.Domain.Generation.Page;
 
 namespace website_generator.Engine.Generation.Page
 {
-    internal class PageWriter : IPageWriter
+    internal class HeaderReader : IHeaderReader
     {
-        private IHtmlVerifier _htmlVerifier;
+        private readonly IHtmlVerifier _htmlVerifier;
 
-        public PageWriter(
-            IHtmlVerifier htmlVerifier
-            )
+        public HeaderReader(IHtmlVerifier htmlVerifier)
         {
             _htmlVerifier = htmlVerifier;
         }
 
-        public void Write(string html)
+        public string ReadHeader()
         {
-
-        }
-
-        private void AddHeader()
-        {
-
-        }
-
-        private void GetHeader()
-        {
-
+            throw new NotImplementedException();
         }
     }
 }

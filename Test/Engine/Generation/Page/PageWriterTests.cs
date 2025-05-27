@@ -11,7 +11,7 @@ using website_generator.Engine.Generation.Page;
 
 namespace Test.Engine.Generation.Page
 {
-    public class PageWriterTests
+    public class PageWriterTests : IDisposable
     {
         private readonly IPageWriter _pageWriter;
         private readonly IHtmlVerifier _htmlVerifier;
@@ -21,6 +21,14 @@ namespace Test.Engine.Generation.Page
             _htmlVerifier = Substitute.For<IHtmlVerifier>();
 
             _pageWriter = new PageWriter(_htmlVerifier);
+        }
+
+        public void Dispose()
+        {
+            if (File.Exists("Output/index.html"))
+            {
+                File.Delete("Output/index.html");
+            }
         }
 
         [Fact]
@@ -42,7 +50,7 @@ namespace Test.Engine.Generation.Page
         }
 
         [Fact]
-        public void WhenWritingPage_GivenEmptyInput_ThenJustWritesHeader()
+        public void WhenWritingPage_GivenEmptyInput_ThenJustEmptyPageWithHeader()
         {
             // Assemble
             var input = "";
