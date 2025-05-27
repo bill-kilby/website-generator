@@ -2,6 +2,6 @@
 {
     internal interface IPageGenerator
     {
-        public void Generate();
+        public string Generate();
     }
 }

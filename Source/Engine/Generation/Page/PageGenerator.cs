@@ -4,13 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using website_generator.Domain.Generation.Page;
+using website_generator.Domain.Generation.Sections;
 
 namespace website_generator.Engine.Generation.Page
 {
     internal class PageGenerator : IPageGenerator
     {
-        // TODO: Should contain a list of the sections.
-        public void Generate()
+        private readonly List<ISectionFactory> _sectionFactories;
+
+        public PageGenerator(
+            List<ISectionFactory> sectionFactories
+            )
+        {
+            _sectionFactories = sectionFactories;
+        }
+
+        public string Generate()
         {
             throw new NotImplementedException();
         }
