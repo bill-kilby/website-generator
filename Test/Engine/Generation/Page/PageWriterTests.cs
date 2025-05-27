@@ -1,8 +1,11 @@
-﻿using System;
+﻿using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using website_generator.Domain.Generation.Common;
+using website_generator.Domain.Generation.Exceptions;
 using website_generator.Domain.Generation.Page;
 using website_generator.Engine.Generation.Page;
 
@@ -11,10 +14,13 @@ namespace Test.Engine.Generation.Page
     public class PageWriterTests
     {
         private readonly IPageWriter _pageWriter;
+        private readonly IHtmlVerifier _htmlVerifier;
 
         public PageWriterTests()
         {
-            _pageWriter = new PageWriter();
+            _htmlVerifier = Substitute.For<IHtmlVerifier>();
+
+            _pageWriter = new PageWriter(_htmlVerifier);
         }
 
         [Fact]
@@ -52,6 +58,26 @@ namespace Test.Engine.Generation.Page
             // Assert
             Assert.Null(exception);
             Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void WhenWritingPage_GivenInvalidHtmlInput_ThenThrowsError()
+        {
+            // Assemble
+            var input = "<div>div>";
+
+            // Act
+            var writeException = Record.Exception(
+                () => _pageWriter.Write(input)
+                );
+
+            var readException = Record.Exception(
+                () => File.ReadAllText("output/index.html")
+                );
+
+            // Assert
+            Assert.IsType<InvalidHTMLException>(writeException);
+            Assert.IsType<FileNotFoundException>(readException);
         }
     }
 }
