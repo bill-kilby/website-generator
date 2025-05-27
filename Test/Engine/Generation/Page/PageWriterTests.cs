@@ -15,12 +15,14 @@ namespace Test.Engine.Generation.Page
     {
         private readonly IPageWriter _pageWriter;
         private readonly IHtmlVerifier _htmlVerifier;
+        private readonly IHeaderReader _headerReader;
 
         public PageWriterTests()
         {
             _htmlVerifier = Substitute.For<IHtmlVerifier>();
+            _headerReader = Substitute.For<IHeaderReader>();
 
-            _pageWriter = new PageWriter(_htmlVerifier);
+            _pageWriter = new PageWriter(_htmlVerifier, _headerReader);
         }
 
         public void Dispose()
@@ -54,7 +56,8 @@ namespace Test.Engine.Generation.Page
         {
             // Assemble
             var input = "";
-            var expected = "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n    <meta test=\"TestHeader\">\r\n</head>\r\n\r\n<body>\r\n</body>\r\n\r\n</html>";
+            var expected = "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n    <meta test=\"TestHeader\">\r\n</head>\r\n\r\n<body>\r\n\r\n</body>\r\n\r\n</html>";
+            _headerReader.ReadHeader().Returns("<head>\r\n    <meta test=\"TestHeader\">\r\n</head>");
 
             // Act
             _pageWriter.Write(input);
@@ -73,6 +76,9 @@ namespace Test.Engine.Generation.Page
         {
             // Assemble
             var input = "<div>div>";
+            _htmlVerifier
+                .WhenForAnyArgs(x => x.Verify(Arg.Any<string>()))
+                .Do(_ => throw new InvalidHTMLException("Invalid HTML"));
 
             // Act
             var writeException = Record.Exception(

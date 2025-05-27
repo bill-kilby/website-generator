@@ -19,7 +19,11 @@ namespace website_generator.Engine.Generation.Page
 
         public string ReadHeader()
         {
-            throw new NotImplementedException();
+            var html = File.ReadAllText("Html/Header.html");
+
+            _htmlVerifier.Verify(html);
+
+            return html;
         }
     }
 }

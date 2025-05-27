@@ -21,7 +21,16 @@ namespace website_generator.Engine.Generation.Page
 
         public string Generate()
         {
-            throw new NotImplementedException();
+            var sb = new StringBuilder();
+
+            foreach(var factory in _sectionFactories )
+            {
+                var section = factory.CreateSection();
+
+                sb.Append( section );
+            }
+
+            return sb.ToString();
         }
     }
 }

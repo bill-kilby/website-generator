@@ -11,7 +11,7 @@ using website_generator.Engine.Generation.Page;
 
 namespace Test.Engine.Generation.Page
 {
-    public class HeaderReaderTests : IDisposable
+    public class HeaderReaderTests
     {
         private IHeaderReader _headerReader;
         private IHtmlVerifier _htmlVerifier;
@@ -20,11 +20,6 @@ namespace Test.Engine.Generation.Page
         {
             _htmlVerifier = Substitute.For<IHtmlVerifier>();
             _headerReader = new HeaderReader(_htmlVerifier);
-        }
-
-        public void Dispose()
-        {
-            File.WriteAllText("Html/Header.html", "<head>\r\n    <meta test=\"TestHeader\">\r\n</head>");
         }
 
         [Fact]
@@ -52,13 +47,18 @@ namespace Test.Engine.Generation.Page
 
             // Assert
             Assert.IsType<FileNotFoundException>(exception);
+
+            // Cleanup
+            File.WriteAllText("Html/Header.html", "<head>\r\n    <meta test=\"TestHeader\">\r\n</head>");
         }
 
         [Fact]
         public void WhenReadingHeader_GivenInvalidHtml_ThenThrowsError()
         {
             // Assemble
-            File.WriteAllText("Html/Header.html", "<head<head>");
+            _htmlVerifier
+                .WhenForAnyArgs(x => x.Verify(Arg.Any<string>()))
+                .Do(_ => throw new InvalidHTMLException("Invalid HTML"));
 
             // Act
             var exception = Record.Exception(
